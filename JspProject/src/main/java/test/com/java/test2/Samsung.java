@@ -4,7 +4,7 @@ public class Samsung implements Printer{
 
 	@Override
 	public void print() {
-		System.out.println("Samsungss 프린터 인쇄중....");
+		System.out.println("Samsungss 여기 프린터 인쇄중....");
 	}
 
 }
