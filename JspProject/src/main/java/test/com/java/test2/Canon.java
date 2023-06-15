@@ -4,7 +4,7 @@ public class Canon implements Printer{
 
 	@Override
 	public void print() {
-		System.out.println("cannon fffsdfsdfsdffffffff프린터 fff인쇄중.fff..sdsㄴsdfsdfㄴdfssdfsdfdf.");
+		System.out.println("cannon 프린터 인쇄중....");
 	}
 
 }
