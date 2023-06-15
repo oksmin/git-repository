@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>My 35th Page - ajax 통신</title>
+    <!-- jquery cdn -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <script>
+        // jquery library
+        window.onload = function(){
+            const $box_div = $('#box-div');
+            const box_div = document.getElementById("box-div");
+            console.log($box_div);
+            console.log(box_div);
+            //$("#box-div").css("background-color", "yellow");
+            $box_div.css('background-color', 'yellow');
+            $box_div.text('안녕 제이쿼리는 처음이지');
+
+            // ajax : javascript-> servlet (rest api) 
+            // ajax <-> rest api 통신
+            //ajaxCall();
+
+            
+        }
+        
+        function appendElement(jsonObj){
+        	const box_div = document.getElementById("box-div");
+         	let p_box = document.createElement("p");
+         	p_box.textContent = jsonObj.name; //jsonObj
+         	p_box.style.fontSize = "25pt";
+         	p_box.style.backgroundColor = "yellow";
+         	
+         	box_div.appendChild(p_box);
+         	
+         	p_box = document.createElement("p");
+         	p_box.textContent = jsonObj.lastName; //jsonObj
+         	p_box.style.fontSize = "25pt";
+         	p_box.style.color = "white";
+         	p_box.style.backgroundColor = "aqua";
+         	
+         	box_div.appendChild(p_box);
+        }
+        
+        function ajaxCallGet(){
+            let data = { name: "bc", lastName: "ef", opKey:"123" };
+			
+            $.ajax(
+                {
+                    url: "/project/api/test"
+                    ,async:true // 비동기 쓰레드,false : 동기식(응답 받을때까지 대기함)
+                    ,contentType: 'application/x-www-form-urlencoded; charset=UTF-8' // 전송타입
+                    ,type:"GET" //method
+                    ,data : data
+                    ,dataType:"json" // 수신타입
+                    ,success:function(data, textStatus){
+                    	appendElement(data);
+                    }
+                    ,error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                }
+            );
+        }
+        function ajaxCallGet2(){
+            let data = { name: "bc", lastName: "ef", opKey:"123" };
+
+            $.ajax(
+                {
+                    url: "/project/api/test"
+                    ,async:true // 비동기 쓰레드,false : 동기식(응답 받을때까지 대기함)
+                    ,contentType:"application/json; charset=UTF-8" //text/plain
+                    ,data: "name="+data.name +"&lastName="+data.lastName+"&opKey=" + data.opKey
+                    ,type:"GET" //method
+                    ,dataType:"text"
+                    ,success:function(data, textStatus){
+                    	let jsonObj= JSON.parse(data);
+                    	appendElement(jsonObj);
+                     	
+                    }
+                    ,error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                }
+            );
+        }
+        function ajaxCallPost(){
+            let data = { name: "bcpost", lastName: "efpost", opKey:"123" };
+
+            $.ajax(
+                {
+                    url: "/project/api/test"
+                    ,async:true // 비동기 쓰레드,false : 동기식(응답 받을때까지 대기함)
+                    ,type:"POST" //method //,headers:{"content-type":"application/json"}
+                    ,contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
+                    ,data: data
+                    ,dataType:'json'//전송받을 데이터 타입
+                    ,success:function(data, textStatus){
+                    	appendElement(data);
+                    }
+                    ,error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                }
+            );
+        }
+
+    </script>
+</head>
+<body>
+	<button onclick="ajaxCallGet();">ajaxCallGet</button>
+    <br>
+    <button onclick="ajaxCallGet2();">ajaxCallGet2</button>
+    <br>
+    <button onclick="ajaxCallPost();">ajaxCallPost</button>
+    
+    
+    <div id="box-div"></div>
+</body>
+</html>
+

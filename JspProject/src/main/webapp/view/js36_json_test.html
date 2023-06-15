@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My 36th Page- Json Test</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <script src="js/js_sysout.js"></script>
+</head>
+<style>
+    table, table td, table th {
+        border: 1px red solid;
+        width: 300px;
+        text-align: center;
+    }
+    tr:nth-of-type(2n){
+        background-color: blue;
+        color:aqua;
+    }
+    tr:nth-of-type(2n+1){
+        background-color: yellow;
+        color:black;
+    }
+    tr:first-child{
+        background-color:transparent;
+        color:black;
+    }
+</style>
+<script>
+    var jsonObj1 = {
+        list:[
+                { name: '박지호', age:30}
+                ,{ name: "김영훈", age:31}
+        ]
+    };
+
+    let trElement;
+    let tableElement;
+    window.onload = function(){
+        init();
+        //testDisplay();
+    }
+
+    function testDisplay(){
+        System.out.println(JSON.stringify(jsonObj1));
+        //------------------------------------
+        makeTable();
+        makeTr();
+        insertElement('th','#');
+        insertElement('th','name');
+        insertElement('th','age');
+        insertTr2Table();
+        console.log(toTable());
+        const list = jsonObj1.list;
+        for(var i=0; i < list.length ; i++){
+            table.insertRow(list[i], i+1);
+        }
+
+        const box_table_json = document.getElementById('box-table-json');
+        box_table_json.appendChild(toTable());
+        //------------------------------------
+
+        const table = new Table();
+        table.makeTr();
+        table.insertElement('th','#');
+        table.insertElement('th','name');
+        table.insertElement('th','age');
+        table.insertTr2Table();
+
+        list = jsonObj1.list;
+        for(var i=0; i < list.length ; i++){
+            table.insertRow(list[i], i+1);
+        }
+        box_table_json.appendChild(table.toTable());
+    }
+    
+    function insertRow(jsonObj, order){
+        makeTr();
+        insertElement('td',order);
+        insertElement('td',jsonObj.name);
+        insertElement('td',jsonObj.age);
+        insertTr2Table();
+    } 
+
+    function makeTable(){
+        tableElement = document.createElement('table');
+    }
+    
+    function makeTr(){
+        trElement = document.createElement('tr');
+    }
+    
+    function insertElement(tag, text){
+        let tagElement = document.createElement(tag);
+        let textNode = document.createTextNode(text);
+        tagElement.appendChild(textNode);
+        trElement.appendChild(tagElement);
+    }
+    
+    function insertTr2Table(){
+        tableElement.appendChild(trElement);
+    }
+    
+    function toTable(){
+        return tableElement;
+    }
+    
+    class Table{
+        tableElement;
+        trElement;
+        
+        constructor(id){
+            this.makeTable(id);
+        }
+        
+        makeTable(id){
+            let table = document.getElementById(id);
+            
+            if( table != null){
+                this.tableElement = table;
+            }else{
+                this.tableElement = document.createElement('table');
+                this.tableElement.id = id;
+            }
+            
+        }
+        
+        makeTr(){
+            this.trElement = document.createElement('tr');
+        }
+        
+        insertElement(tag, text){
+            let tagElement = document.createElement(tag);
+            let textNode = document.createTextNode(text);
+            tagElement.appendChild(textNode);
+            this.trElement.appendChild(tagElement);
+        }
+        
+        insertTr2Table(){
+            this.tableElement.appendChild(this.trElement);
+        }
+        
+        insertRow(jsonObj, order){
+            this.makeTr();
+            this.insertElement('td',order);
+            this.insertElement('td',jsonObj.name);
+            this.insertElement('td',jsonObj.age);
+            this.insertTr2Table();
+        }
+
+        toTable(){
+            return this.tableElement;
+        }
+    }    
+
+    function display(jsonObj){
+        const box_table_json = document.getElementById('box-table-json');
+        const table = new Table('box-table');
+        table.makeTr();
+        table.insertElement('th','#');
+        table.insertElement('th','name');
+        table.insertElement('th','age');
+        table.insertTr2Table();
+
+        const list = jsonObj.list;
+        for(var i=0; i < list.length ; i++){
+            table.insertRow(list[i], i+1);
+        }
+        box_table_json.appendChild(table.toTable());
+    }
+
+    function getMemberDual(){
+        const data = { opKey : 123 };
+        
+        $.ajax(
+                {
+                    url: "/project/api/member"
+                    ,async:true // 비동기 쓰레드,false : 동기식(응답 받을때까지 대기함)
+                    ,contentType: 'application/x-www-form-urlencoded; charset=UTF-8' // 전송타입
+                    ,type:"POST" //method
+                    ,data : data
+                    ,dataType:"json" // 수신타입
+                    ,success:function(data, textStatus){
+                    	displayRows(data, 'box-table');
+                    }
+                    ,error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                }
+            );
+    }
+
+    function displayRows(jsonObj, id){
+		const table = new Table(id);
+		const index = table.toTable().children.length;
+		System.out.println(index);
+		
+		const list = jsonObj.list;
+        for(var i=0; i < list.length ; i++){
+            table.insertRow(list[i], (index+i) );
+        }
+    }
+
+    function getMember(){
+        const data = { opKey : 123 };
+        
+        $.ajax(
+                {
+                    url: "/project/api/member"
+                    ,async:true // 비동기 쓰레드,false : 동기식(응답 받을때까지 대기함)
+                    ,contentType: 'application/x-www-form-urlencoded; charset=UTF-8' // 전송타입
+                    ,type:"GET" //method
+                    ,data : data
+                    ,dataType:"json" // 수신타입
+                    ,success:function(data, textStatus){
+                    	display(data);
+                    }
+                    ,error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                }
+            );
+    }
+    function buttonDisabledEnabled(element){
+    	element.disabled = true;
+    	let button = document.getElementById("btn2nd");
+    	button.disabled = false;
+    	
+    }
+</script>
+
+<body>
+    <div>
+        <button onclick="getMember();buttonDisabledEnabled(this);">ajax로 데이터가져오기</button><br>
+        <button id="btn2nd" onclick="getMemberDual();" disabled>ajax로 데이터가져오기2</button>
+    </div>
+
+    <div id="box-table-json"></div>
+    <!-- <div id="box-table-input">
+        <table>
+            <tr>
+                <th>#</th>
+                <th>name</th>
+                <th>age</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>박지호</td>
+                <td>30</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>김영훈</td>
+                <td>31</td>
+            </tr>
+        </table>
+    </div> -->
+    
+    <div id="box-div"></div>
+
+</body>
+</html>

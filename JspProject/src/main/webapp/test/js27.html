@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My 27th Page - 내장객체</title>
+    <script>
+        window.onload = function(){
+            console.log("여기");
+
+            console.log(window);
+            console.log(screen);
+            console.log(screen.availHeight);
+            console.log(screen.height);
+            //screen.availHeight = "80px";
+            console.log(location);
+            console.log(history);
+            console.log(console);
+            console.log(navigator.userAgent);
+            console.log(navigator);
+            
+            var browser = navigator.userAgentData.brands;
+            var isMobile = navigator.userAgentData.mobile;
+            var platform = navigator.userAgentData.platform;
+
+            let msg = "";
+            if(isMobile){
+                msg ="모바일로 접속하셨군요\n";
+            }else{
+                msg = "데스크탑 " + platform + " 에서 접속하셨군요\n";
+            }
+
+            for(var i=0 ; i < browser.length ; i++){
+                var brand = browser[i].brand;
+                if(brand == "Google Chrome") {
+                    msg += "크롬 브라우저를 사용하시네요 :)";
+                }else if(brand == "Microsoft Edge"){
+                    msg += "엣 브라우저를 사용하시네요 :)";
+                }else{
+                    //msg += browser[0].brand + "로 사용하시네요."
+                }
+            }
+
+            alert(msg);
+
+            
+        }
+
+    </script>
+</head>
+<body>
+    <button onclick="javascript:history.back();">이전</button>
+    <button onclick="history.forward();">다음</button><br>
+    <button onclick="javascript:history.go(-1);">이전 go(-1)</button>
+    <button onclick="history.go(2);">다음 go(2)</button><br>
+    <button onclick="location.href='http://www.naver.com';">네이버로 이동</button>
+    <script>
+        console.log("여기2");
+    </script>
+</body>
+</html>

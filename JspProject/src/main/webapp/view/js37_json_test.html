@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My 37th Page - Json 또 Test</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <script src="js/js_sysout.js"></script>
+    <script src="js/js_table.js"></script>
+    <style>
+       
+        table, table td, table th {
+            border: 1px red solid;    
+            width: 50%;       
+            text-align: center;
+        }
+        tr:nth-of-type(2n){
+            background-color: blue;
+            color:aqua;
+        }
+        tr:nth-of-type(2n+1){
+            background-color: yellow;
+            color:black;
+        }
+        tr:first-child{
+            background-color:transparent;
+            color:black;
+        }
+    </style>
+    <script>
+        window.onload = function (){
+            init();
+            getPublicData(1, 100);
+        }
+        
+        function getPublicData(page, perPage){
+            const url = {   href : "https://api.odcloud.kr/api/15111389/v1/uddi:41944402-8249-4e45-9e9d-a52d0a7db1cc"
+                };
+
+            const decoded = "XKL1GkKtwYuho4vgELMsHwLJu1cEuZFc2YKWsqSlNEIumOcQnDtstUKKhsDGNQ9o4v3bg4HIy9TBQs47uLnJDw==";
+            const encoded = encodeURI("XKL1GkKtwYuho4vgELMsHwLJu1cEuZFc2YKWsqSlNEIumOcQnDtstUKKhsDGNQ9o4v3bg4HIy9TBQs47uLnJDw==");
+
+            System.out.println(decoded);
+            System.out.println(encoded);
+
+            const param = {
+                    page : page
+                    ,perPage : perPage
+                    ,serviceKey : decoded
+                };
+            
+            $.ajax(
+                {
+                    url: url.href
+                    ,async:true // 비동기 쓰레드,false : 동기식(응답 받을때까지 대기함)
+                    ,contentType: 'application/x-www-form-urlencoded; charset=UTF-8' // 전송타입
+                    ,type:"GET" //method
+                    ,data : param
+                    ,dataType:"json" // 수신타입
+                    ,success:function(data, textStatus){
+                        let array = data.data;
+                        display(array);
+                    }
+                    ,error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                }
+            );
+            
+    }
+   
+    const field = { 
+                    building : "시설명"
+                    ,homepage : "홈페이지"
+                    ,hour : "운영시간"
+                    ,tel : "전화번호"
+                    ,road :"도로명주소"
+                    ,postCode : "우편번호"
+                    ,parking : "주차 가능여부"
+                    ,price : "입장(이용료)가격 정보"
+                    ,animalSize : "입장 가능 동물 크기"
+                    ,extra : "애견 동반 추가 요금"
+                };
+    function display(array){
+        let jsonObj;
+        const box_table_json = document.getElementById('box-table-json');
+        const table = new Table('box-table');
+        table.makeTr();
+        table.insertElement('th', field.building);
+        table.insertElement('th', field.homepage);
+        table.insertElement('th', field.hour);
+        table.insertElement('th', field.tel);
+        table.insertElement('th', field.road);
+        table.insertElement('th', field.postCode);
+        table.insertElement('th', field.parking);
+        table.insertElement('th', field.price);
+        table.insertElement('th', field.animalSize);
+        table.insertElement('th', field.extra);
+        table.insertTr2Table();
+        
+        box_table_json.appendChild(table.toTable());
+
+
+        for(var i=0; i < array.length ; i++ ){
+            jsonObj = array[i];
+            insertRow(table, jsonObj)
+        }
+    }
+    function insertRow(tableElement, jsonObj){
+        tableElement.makeTr();
+        tableElement.insertElement('td', jsonObj[field.building]);
+        tableElement.insertElement('td', jsonObj[field.homepage]);
+        tableElement.insertElement('td', jsonObj[field.hour]);
+        tableElement.insertElement('td', jsonObj[field.tel]);
+        tableElement.insertElement('td', jsonObj[field.road]);
+        tableElement.insertElement('td', jsonObj[field.postCode]);
+        tableElement.insertElement('td', jsonObj[field.parking]);
+        tableElement.insertElement('td', jsonObj[field.price]);
+        tableElement.insertElement('td', jsonObj[field.animalSize]);
+        tableElement.insertElement('td', jsonObj[field.extra]);
+       
+        tableElement.insertTr2Table();
+    }
+        
+    </script>
+</head>
+<body>
+    <div id="box-table-json"></div>
+    <div id="box-div"></div>
+</body>
+</html>
